@@ -1,9 +1,14 @@
 import "./App.css";
-import styled from "styled-components";
+import AppBar from "./AppBar";
 import AppLayout from "./AppLayout";
 
 const App = () => {
-  return <AppLayout>hello world</AppLayout>;
+  return (
+    <AppLayout>
+      <AppBar />
+      Welcome to CryptoDash
+    </AppLayout>
+  );
 };
 
 export default App;
