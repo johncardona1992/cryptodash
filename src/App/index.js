@@ -1,3 +1,4 @@
+import Settings from "../Settings";
 import "./App.css";
 import AppBar from "./AppBar";
 import AppLayout from "./AppLayout";
@@ -8,7 +9,7 @@ const App = () => {
     <AppLayout>
       <AppProvider>
         <AppBar />
-        Welcome to CryptoDash
+        <Settings/>
       </AppProvider>
     </AppLayout>
   );

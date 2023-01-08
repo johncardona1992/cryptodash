@@ -26,12 +26,12 @@ const ControlButton = ({ name }) => {
     return lower.charAt(0).toUpperCase() + lower.substr(1);
   };
 
-  const { state, handlePage } = useAppContext();
+  const { state, pageHandler } = useAppContext();
 
   return (
     <ControlButtonElem
       active={state.page === name}
-      onClick={() => handlePage(name)}
+      onClick={() => pageHandler(name)}
     >
       {toProperCase(name)}
     </ControlButtonElem>
