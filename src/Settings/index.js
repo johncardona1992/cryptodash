@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
+import React from "react";
 import styled from "styled-components";
+import Page from "../Shared/Page";
+import CoinGrid from "./CoinGrid";
 import ConfirmBottom from "./ConfirmBottom";
 import WelcomeMessage from "./WelcomeMessage";
 
@@ -9,12 +11,13 @@ const WelcomeStyled = styled.div`
 
 const Settings = () => {
   return (
-    <Fragment>
+    <Page name="settings">
       <WelcomeStyled>
-        <WelcomeMessage/>
+        <WelcomeMessage />
       </WelcomeStyled>
-      <ConfirmBottom/>
-    </Fragment>
+      <ConfirmBottom />
+      <CoinGrid />
+    </Page>
   );
 };
 

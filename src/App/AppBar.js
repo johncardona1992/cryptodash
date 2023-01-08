@@ -9,7 +9,7 @@ const Logo = styled.div`
 const Bar = styled.div`
   display: grid;
   margin-bottom: 40px;
-  grid-template-columns: 180px auto 100px 100px;
+  grid-template-columns: 180px auto 150px 130px;
 `;
 
 const ControlButtonElem = styled.div`
@@ -17,7 +17,7 @@ const ControlButtonElem = styled.div`
   ${(props) =>
     props.active &&
     css`
-      text-shadow: 0px 0px 60px #03ff03;
+      text-shadow: 0px 0px 30px #03ff03;
     `};
 `;
 

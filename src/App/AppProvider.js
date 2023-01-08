@@ -3,27 +3,30 @@ import { useState, useContext } from "react";
 
 //cryptoCompare API
 const cc = require("cryptocompare");
+cc.setApiKey(
+  process.env.REACT_APP_CRYPTOAPI
+);
 
 const AppContext = React.createContext();
 
-const AppProvider = ({ children }) => {
+const AppProvider = (props) => {
   //create context state
   const [state, setState] = useState({
     page: "dashboard",
     firstVisit: true,
-    data: null,
+    coinList: null,
   });
 
   //fetch data at the end of rendering AppProvider
   useEffect(() => {
     const fetchCoins = async () => {
       try {
-        let coinList = await cc.coinList();
-        console.log(coinList.Data);
+        let data = await cc.coinList();
         setState((prevState) => ({
           ...prevState,
-          data: coinList.Data,
+          coinList: data.Data,
         }));
+        console.log(data.Data);
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +77,7 @@ const AppProvider = ({ children }) => {
         confirmFavoritesHandler,
       }}
     >
-      {children}
+      {props.children}
     </AppContext.Provider>
   );
 };
