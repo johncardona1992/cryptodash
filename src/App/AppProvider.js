@@ -9,7 +9,6 @@ const AppProvider = ({ children }) => {
   });
 
   const handlePage = (name) => {
-    console.log(name);
     setState((prevState) => ({ ...prevState, page: name }));
   };
 
