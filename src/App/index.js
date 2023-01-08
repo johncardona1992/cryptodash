@@ -1,11 +1,9 @@
-import './App.css';
+import "./App.css";
+import styled from "styled-components";
+import AppLayout from "./AppLayout";
 
-function App() {
-  return (
-    <div className="App">
-        hello world
-    </div>
-  );
-}
+const App = () => {
+  return <AppLayout>hello world</AppLayout>;
+};
 
 export default App;
