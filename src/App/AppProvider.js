@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
+import _ from "lodash";
 
 //constants
 const MAX_FAVORITES = 10;
@@ -43,7 +44,6 @@ const AppProvider = (props) => {
 
   const addCoin = (key) => {
     let favorites = [...state.favorites];
-    console.log('adding!');
     if (favorites.length < MAX_FAVORITES) {
       favorites.push(key);
       setState((prevState) => ({
@@ -52,10 +52,9 @@ const AppProvider = (props) => {
       }));
     }
   };
-  
+
   const removeCoin = (key) => {
     let favorites = [...state.favorites];
-    console.log('removing!');
     if (favorites.length) {
       setState((prevState) => ({
         ...prevState,
@@ -64,6 +63,7 @@ const AppProvider = (props) => {
     }
   };
 
+  const isInFavorites = (key) => _.includes(state.favorites, key);
   const confirmFavoritesHandler = () => {
     //update context state
     setState((prevState) => ({
@@ -102,6 +102,7 @@ const AppProvider = (props) => {
         confirmFavoritesHandler,
         addCoin,
         removeCoin,
+        isInFavorites,
       }}
     >
       {props.children}
