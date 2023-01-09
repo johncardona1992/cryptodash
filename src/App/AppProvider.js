@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 
+//constants
+const MAX_FAVORITES = 10;
+
 //cryptoCompare API
 const cc = require("cryptocompare");
-cc.setApiKey(
-  process.env.REACT_APP_CRYPTOAPI
-);
+cc.setApiKey(process.env.REACT_APP_CRYPTOAPI);
 
 const AppContext = React.createContext();
 
@@ -13,6 +14,7 @@ const AppProvider = (props) => {
   //create context state
   const [state, setState] = useState({
     page: "dashboard",
+    favorites: ["BTC", "ETH"],
     firstVisit: true,
     coinList: null,
   });
@@ -37,6 +39,29 @@ const AppProvider = (props) => {
   //page handler
   const pageHandler = (name) => {
     return setState((prevState) => ({ ...prevState, page: name }));
+  };
+
+  const addCoin = (key) => {
+    let favorites = [...state.favorites];
+    console.log('adding!');
+    if (favorites.length < MAX_FAVORITES) {
+      favorites.push(key);
+      setState((prevState) => ({
+        ...prevState,
+        favorites,
+      }));
+    }
+  };
+  
+  const removeCoin = (key) => {
+    let favorites = [...state.favorites];
+    console.log('removing!');
+    if (favorites.length) {
+      setState((prevState) => ({
+        ...prevState,
+        favorites: favorites.filter((item) => item !== key),
+      }));
+    }
   };
 
   const confirmFavoritesHandler = () => {
@@ -75,6 +100,8 @@ const AppProvider = (props) => {
         pageHandler,
         savedSettingsHandler,
         confirmFavoritesHandler,
+        addCoin,
+        removeCoin,
       }}
     >
       {props.children}

@@ -4,16 +4,30 @@ import CoinImage from "../Shared/CoinImage";
 import { DeletableTitle, SelectableTile } from "../Shared/Tile";
 import CoinHeaderGrid from "./CoinHeaderGrid";
 
+const clickCoinHandler = (topSection, coinKey, addCoin, removeCoin) => {
+  return topSection
+    ? () => {
+        removeCoin(coinKey);
+      }
+    : () => {
+        addCoin(coinKey);
+      };
+};
+
 const CoinTile = (props) => {
-  const { state } = useAppContext();
+  const { state, addCoin, removeCoin } = useAppContext();
   let coin = state.coinList[props.coinKey];
   let TileClass = SelectableTile;
   if (props.topSection) {
     TileClass = DeletableTitle;
   }
   return (
-    <TileClass>
-      <CoinHeaderGrid topSection={props.topSection} name={coin.CoinName} symbol={coin.Symbol} />
+    <TileClass onClick={clickCoinHandler(props.topSection, props.coinKey, addCoin, removeCoin)}>
+      <CoinHeaderGrid
+        topSection={props.topSection}
+        name={coin.CoinName}
+        symbol={coin.Symbol}
+      />
       <CoinImage coin={coin} />
     </TileClass>
   );

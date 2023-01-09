@@ -13,13 +13,13 @@ const CoinGridStyled = styled.div`
 const CoinGrid = (props) => {
   const { state } = useAppContext();
 
-  const getCoinsToDisplay = (coins, topSection) => {
-    return Object.keys(coins).slice(0,topSection ? 10 : 100);
+  const getCoinsToDisplay = (coins, topSection, favorites) => {
+    return topSection ? favorites : Object.keys(coins).slice(0,100);
   };
 
   return (
     <CoinGridStyled>
-      {getCoinsToDisplay(state.coinList, props.topSection).map((item) => (
+      {getCoinsToDisplay(state.coinList, props.topSection, state.favorites).map((item) => (
         <CoinTile topSection={props.topSection} coinKey={item} />
       ))}
     </CoinGridStyled>
