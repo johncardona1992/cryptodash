@@ -10,17 +10,17 @@ const CoinGridStyled = styled.div`
   margin-top: 40px;
 `;
 
-const CoinGrid = () => {
+const CoinGrid = (props) => {
   const { state } = useAppContext();
 
-  const getCoinsToDisplay = (coins) => {
-    return Object.keys(coins).slice(0, 100);
+  const getCoinsToDisplay = (coins, topSection) => {
+    return Object.keys(coins).slice(0,topSection ? 10 : 100);
   };
 
   return (
     <CoinGridStyled>
-      {getCoinsToDisplay(state.coinList).map((item) => (
-        <CoinTile coinKey={item} />
+      {getCoinsToDisplay(state.coinList, props.topSection).map((item) => (
+        <CoinTile topSection={props.topSection} coinKey={item} />
       ))}
     </CoinGridStyled>
   );

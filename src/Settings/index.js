@@ -15,6 +15,7 @@ const Settings = () => {
       <WelcomeStyled>
         <WelcomeMessage />
       </WelcomeStyled>
+      <CoinGrid topSection/>
       <ConfirmBottom />
       <CoinGrid />
     </Page>
