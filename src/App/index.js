@@ -1,3 +1,4 @@
+import Dashboard from "../Dashboard";
 import Settings from "../Settings";
 import Content from "../Shared/Content";
 import "./App.css";
@@ -12,6 +13,7 @@ const App = () => {
         <AppBar />
         <Content>
           <Settings />
+          <Dashboard />
         </Content>
       </AppProvider>
     </AppLayout>

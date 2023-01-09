@@ -17,12 +17,12 @@ const AppProvider = ({ children }) => {
   const [state, setState] = useState({
     page: "dashboard",
     favorites: ["BTC", "ETH"],
-    firstVisit: true,
+    firstVisit: false,
     coinList: null,
     filteredCoins: null,
     prices: null,
+    currentFavorite: null,
   });
-
 
   //fetch data at the end of rendering AppProvider
   useEffect(() => {
@@ -33,19 +33,16 @@ const AppProvider = ({ children }) => {
           ...prevState,
           coinList: data.Data,
         }));
-        console.log(data.Data);
       } catch (error) {
         console.warn(error);
       }
     };
 
     const fetchPrices = async () => {
-
       if (state.firstVisit) return;
       let prices = await pricesHttpRequest();
       // We must filter the empty price objects (not in the lecture)
       prices = prices.filter((price) => Object.keys(price).length);
-      console.log(prices);
       setState((prevState) => ({
         ...prevState,
         prices,
@@ -99,17 +96,36 @@ const AppProvider = ({ children }) => {
   const isInFavorites = (key) => _.includes(state.favorites, key);
 
   const confirmFavoritesHandler = () => {
+    let currentFavorite = state.favorites[0];
+
     //update context state
     setState((prevState) => ({
       ...prevState,
       page: "dashboard",
       firstVisit: false,
+      currentFavorite,
     }));
 
     return localStorage.setItem(
       "cryptoDash",
       JSON.stringify({
         favorites: state.favorites,
+        currentFavorite,
+      })
+    );
+  };
+
+  //set current Favorite
+  const currentFavoriteHandler = (sym) => {
+    setState((prevState) => ({
+      ...prevState,
+      currentFavorite: sym,
+    }));
+    localStorage.setItem(
+      "cryptoDash",
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem("cryptoDash")),
+        currentFavorite: sym,
       })
     );
   };
@@ -124,8 +140,8 @@ const AppProvider = ({ children }) => {
         firstVisit: true,
       }));
     }
-    let { favorites } = cryptoDashData;
-    return { favorites };
+    let { favorites, currentFavorite } = cryptoDashData;
+    return { favorites, currentFavorite };
   };
 
   const filterCoinsHandler = (filteredCoins) => {
@@ -146,6 +162,7 @@ const AppProvider = ({ children }) => {
         removeCoin,
         isInFavorites,
         filterCoinsHandler,
+        currentFavoriteHandler,
       }}
     >
       {children}

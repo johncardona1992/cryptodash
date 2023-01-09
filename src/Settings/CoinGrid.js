@@ -39,7 +39,7 @@ const CoinGrid = (props) => {
         state.favorites,
         state.filteredCoins
       ).map((item) => (
-        <CoinTile topSection={props.topSection} coinKey={item} />
+        <CoinTile key={item} topSection={props.topSection} coinKey={item} />
       ))}
     </CoinGridStyled>
   );

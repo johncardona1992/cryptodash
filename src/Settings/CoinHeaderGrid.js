@@ -33,4 +33,4 @@ const CoinHeaderGrid = (props) => {
   );
 };
 
-export default CoinHeaderGrid;
+export { CoinHeaderGrid, CoinHeaderGridStyled };
