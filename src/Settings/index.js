@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Page from "../Shared/Page";
 import CoinGrid from "./CoinGrid";
 import ConfirmBottom from "./ConfirmBottom";
+import Search from "./Search";
 import WelcomeMessage from "./WelcomeMessage";
 
 const WelcomeStyled = styled.div`
@@ -17,6 +18,7 @@ const Settings = () => {
       </WelcomeStyled>
       <CoinGrid topSection/>
       <ConfirmBottom />
+      <Search/>
       <CoinGrid />
     </Page>
   );

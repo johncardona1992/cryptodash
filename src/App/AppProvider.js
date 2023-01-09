@@ -18,6 +18,7 @@ const AppProvider = (props) => {
     favorites: ["BTC", "ETH"],
     firstVisit: true,
     coinList: null,
+    filteredCoins: null,
   });
 
   //fetch data at the end of rendering AppProvider
@@ -91,8 +92,15 @@ const AppProvider = (props) => {
         firstVisit: true,
       }));
     }
-    let {favorites} = cryptoDashData;
-    return {favorites};
+    let { favorites } = cryptoDashData;
+    return { favorites };
+  };
+
+  const filterCoinsHandler = (filteredCoins) => {
+    setState((prevState) => ({
+      ...prevState,
+      filteredCoins,
+    }))
   };
 
   return (
@@ -105,6 +113,7 @@ const AppProvider = (props) => {
         addCoin,
         removeCoin,
         isInFavorites,
+        filterCoinsHandler,
       }}
     >
       {props.children}
