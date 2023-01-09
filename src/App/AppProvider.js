@@ -11,15 +11,18 @@ cc.setApiKey(process.env.REACT_APP_CRYPTOAPI);
 
 const AppContext = React.createContext();
 
-const AppProvider = (props) => {
+const AppProvider = ({ children }) => {
   //create context state
+
   const [state, setState] = useState({
     page: "dashboard",
     favorites: ["BTC", "ETH"],
     firstVisit: true,
     coinList: null,
     filteredCoins: null,
+    prices: null,
   });
+
 
   //fetch data at the end of rendering AppProvider
   useEffect(() => {
@@ -32,11 +35,40 @@ const AppProvider = (props) => {
         }));
         console.log(data.Data);
       } catch (error) {
-        console.log(error);
+        console.warn(error);
       }
     };
+
+    const fetchPrices = async () => {
+
+      if (state.firstVisit) return;
+      let prices = await pricesHttpRequest();
+      // We must filter the empty price objects (not in the lecture)
+      prices = prices.filter((price) => Object.keys(price).length);
+      console.log(prices);
+      setState((prevState) => ({
+        ...prevState,
+        prices,
+      }));
+    };
+
+    const pricesHttpRequest = async () => {
+      let favorites = [...state.favorites];
+      let data = [];
+      for (let i = 0; i < favorites.length; i++) {
+        try {
+          let priceData = await cc.priceFull(favorites[i], "USD");
+          data.push(priceData);
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+      return data;
+    };
+
     fetchCoins();
-  }, []);
+    fetchPrices();
+  }, [state.firstVisit, state.favorites]);
 
   //page handler
   const pageHandler = (name) => {
@@ -100,7 +132,7 @@ const AppProvider = (props) => {
     setState((prevState) => ({
       ...prevState,
       filteredCoins,
-    }))
+    }));
   };
 
   return (
@@ -116,7 +148,7 @@ const AppProvider = (props) => {
         filterCoinsHandler,
       }}
     >
-      {props.children}
+      {children}
     </AppContext.Provider>
   );
 };
