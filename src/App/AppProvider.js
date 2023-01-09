@@ -64,6 +64,7 @@ const AppProvider = (props) => {
   };
 
   const isInFavorites = (key) => _.includes(state.favorites, key);
+
   const confirmFavoritesHandler = () => {
     //update context state
     setState((prevState) => ({
@@ -75,7 +76,7 @@ const AppProvider = (props) => {
     return localStorage.setItem(
       "cryptoDash",
       JSON.stringify({
-        test: "hello",
+        favorites: state.favorites,
       })
     );
   };
@@ -90,7 +91,8 @@ const AppProvider = (props) => {
         firstVisit: true,
       }));
     }
-    return {};
+    let {favorites} = cryptoDashData;
+    return {favorites};
   };
 
   return (
