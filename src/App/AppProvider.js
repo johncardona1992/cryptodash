@@ -1,13 +1,62 @@
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import _ from "lodash";
+import moment from "moment";
 
 //constants
 const MAX_FAVORITES = 10;
+const TIME_UNITS = 10;
 
 //cryptoCompare API
 const cc = require("cryptocompare");
 cc.setApiKey(process.env.REACT_APP_CRYPTOAPI);
+
+const fetchHistorical = async (
+  firstVisit,
+  currentFavorite,
+  setState,
+  timeInterval
+) => {
+  console.log("running fetchHistorical");
+  if (firstVisit) return;
+  let results = await historicalHttpRequest(currentFavorite, timeInterval);
+  let historical = [
+    {
+      name: currentFavorite,
+      data: results.map((ticker, index) => [
+        moment()
+          .subtract({ [timeInterval]: TIME_UNITS - index })
+          .valueOf(),
+        ticker.USD,
+      ]),
+    },
+  ];
+
+  setState((prevState) => ({
+    ...prevState,
+    historical,
+  }));
+};
+
+const historicalHttpRequest = async (currentFavorite, timeInterval) => {
+  let promises = [];
+  for (let units = TIME_UNITS; units > 0; units--) {
+    try {
+      promises.push(
+        cc.priceHistorical(
+          currentFavorite,
+          ["USD"],
+          moment()
+            .subtract({ [timeInterval]: units })
+            .toDate()
+        )
+      );
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+  return Promise.all(promises);
+};
 
 const AppContext = React.createContext();
 
@@ -22,6 +71,8 @@ const AppProvider = ({ children }) => {
     filteredCoins: null,
     prices: null,
     currentFavorite: null,
+    historical: null,
+    timeInterval: "months",
   });
 
   //fetch data at the end of rendering AppProvider
@@ -65,7 +116,18 @@ const AppProvider = ({ children }) => {
 
     fetchCoins();
     fetchPrices();
-  }, [state.firstVisit, state.favorites]);
+    fetchHistorical(
+      state.firstVisit,
+      state.currentFavorite,
+      setState,
+      state.timeInterval
+    );
+  }, [
+    state.firstVisit,
+    state.favorites,
+    state.currentFavorite,
+    state.timeInterval,
+  ]);
 
   //page handler
   const pageHandler = (name) => {
@@ -104,6 +166,8 @@ const AppProvider = ({ children }) => {
       page: "dashboard",
       firstVisit: false,
       currentFavorite,
+      prices: null,
+      historical: null,
     }));
 
     return localStorage.setItem(
@@ -120,6 +184,7 @@ const AppProvider = ({ children }) => {
     setState((prevState) => ({
       ...prevState,
       currentFavorite: sym,
+      historical: null,
     }));
     localStorage.setItem(
       "cryptoDash",
@@ -151,6 +216,14 @@ const AppProvider = ({ children }) => {
     }));
   };
 
+  const changeChartSelect = (value) => {
+    setState((prevState) => ({
+      ...prevState,
+      timeInterval: value,
+      historical: null,
+    }));
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -163,6 +236,7 @@ const AppProvider = ({ children }) => {
         isInFavorites,
         filterCoinsHandler,
         currentFavoriteHandler,
+        changeChartSelect,
       }}
     >
       {children}

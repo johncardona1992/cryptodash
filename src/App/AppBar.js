@@ -19,6 +19,9 @@ const ControlButtonElem = styled.div`
     css`
       text-shadow: 0px 0px 30px #03ff03;
     `};
+    ${props => props.hidden && css`
+    display: none;
+    `}
 `;
 
 const ControlButton = ({ name }) => {
@@ -32,6 +35,7 @@ const ControlButton = ({ name }) => {
     <ControlButtonElem
       active={state.page === name}
       onClick={() => pageHandler(name)}
+      hidden={state.firstVisit && state.page === 'dashboard'}
     >
       {toProperCase(name)}
     </ControlButtonElem>

@@ -52,7 +52,7 @@ const ChangePercent = (props) => {
   return (
     <JustifyRight>
       <ChangePct red={props.data.CHANGEPCT24HOUR < 0}>
-        {numberFormat(props.data.CHANGEPCT24HOUR)}
+        {numberFormat(props.data.CHANGEPCT24HOUR)}%
       </ChangePct>
     </JustifyRight>
   );
